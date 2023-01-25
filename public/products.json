@@ -1,0 +1,21 @@
+[
+    {
+        "_id": "628f080a987d5d908b91053c",
+        "name": "فیکوس بورگاندی",
+        "description": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت ",
+        "size": [
+            "بزرگ",
+            "متوسط",
+            "کوچک"
+        ],
+        "price": {
+            "بزرگ": "80000",
+            "متوسط": "65000",
+            "کوچک": "55000"
+        },
+        "images": [
+            "/images/ficus-burgundy.png",
+            "https://res.cloudinary.com/dqai08cwg/image/upload/v1662439913/plant-shop/ficus-burgundy-2_esbdpk.jpg"
+        ]
+    }
+]
