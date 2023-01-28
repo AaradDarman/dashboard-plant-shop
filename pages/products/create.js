@@ -16,6 +16,7 @@ import SizeSelector from "components/Products/SizeSelector";
 import StockInput from "components/Products/StockInput";
 import PotSizes from "components/Products/PotSizes";
 import Cookies from "cookies";
+import { extractImages } from "utils/product-helper";
 
 const Create = () => {
   const formikRef = useRef(null);
@@ -132,9 +133,9 @@ const Create = () => {
       validationSchema={AddProductSchema}
       onSubmit={async (values) => {
         let formData = new FormData();
-        // let images = extractImages(name, values.images);
-        for (let i = 0; i < values.images.length; i++) {
-          formData.append(values.images[i].name, values.images[i]);
+        let images = extractImages(values.name, values.images);
+        for (let i = 0; i < images.length; i++) {
+          formData.append(images[i].name, images[i]);
         }
         formData.append(
           "product",

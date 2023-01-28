@@ -153,9 +153,7 @@ const ProductContext = ({ children }) => {
       />
       <LoadingComponent
         show={
-          status === "editing" ||
-          status === "createing" ||
-          status === "deleting"
+          status === "editing" || status === "creating" || status === "deleting"
         }
       />
       {children}

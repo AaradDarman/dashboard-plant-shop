@@ -7,11 +7,18 @@ const renameFile = (originalFile, newName) => {
   });
 };
 
-export const extractImages = (name, images) => {
+/**
+ *
+ * @param {String} productName - name of product
+ * @param {[File]} images - product images
+ *
+ *
+ */
+export const extractImages = (productName, images) => {
   let renamedImages = images.map((image, index) =>
-    renameFile(image, `${kebabCase(name)}-${index + 1}.`)
+  renameFile(image, `${kebabCase(productName)}-${index + 1}.`)
   );
-
+  
   return renamedImages;
 };
 
