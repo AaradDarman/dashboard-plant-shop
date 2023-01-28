@@ -26,6 +26,10 @@ const StyledTableCell = muiStyled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
     borderColor: "rgba(255, 255, 255, 0.23)",
+    padding: "6px 0",
+    [theme.breakpoints.up("md")]: {
+      padding: "6px 16px",
+    },
   },
 }));
 

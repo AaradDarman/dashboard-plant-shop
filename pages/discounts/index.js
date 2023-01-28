@@ -102,7 +102,7 @@ const Discounts = () => {
           setFieldValue,
           handleSubmit,
         }) => (
-          <div className="flex">
+          <div className="flex flex-wrap">
             <Head>
               <title>تخفیفات</title>
             </Head>
@@ -250,7 +250,7 @@ const Discounts = () => {
                 ذخیره
               </Button>
             </div>
-            <div className="h-[400px] flex-1 p-4">
+            <div className="h-[400px] flex-1 py-4 px-[4px] md:p-4">
               <SelectedProductsTable
                 items={selectedForDiscount}
                 onRemoveItem={handleRemoveSelectedProduct}

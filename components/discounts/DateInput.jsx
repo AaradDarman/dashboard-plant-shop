@@ -25,9 +25,12 @@ const DateInput = ({
       required
       variant="outlined"
       value={stringDate}
-      sx={{
+      sx={(theme) => ({
         marginBottom: "1rem",
-        width: "270px",
+        width: "245px",
+        [theme.breakpoints.up("md")]: {
+          width: "270px",
+        },
         "& label.Mui-focused": {
           color: "accent.main",
         },
@@ -43,7 +46,7 @@ const DateInput = ({
               borderColor: "error.main",
             },
         },
-      }}
+      })}
       InputProps={{
         endAdornment: (
           <InputAdornment
