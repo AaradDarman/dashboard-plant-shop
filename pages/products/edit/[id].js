@@ -4,7 +4,7 @@ import { Button, Divider, FormHelperText, TextField } from "@mui/material";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import _ from "lodash";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
@@ -44,7 +44,10 @@ const Edit = ({ id }) => {
     setInventory,
     handleEditProduct,
   } = useContext(productContext);
-
+  
+  const { categories, sizes: reduxSizes } = useSelector(
+    (state) => state.products
+  );
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -288,13 +291,7 @@ const Edit = ({ id }) => {
                 inputProps={{ className: "bg-transparent" }}
               />
               <CategorySelector
-                categories={[
-                  "آپارتمانی",
-                  "فضای باز",
-                  "کاکتوس",
-                  "sebaar",
-                  "seboor",
-                ]}
+                categories={categories}
                 values={category}
                 onChange={(v) => {
                   setCategory(v);
@@ -322,11 +319,11 @@ const Edit = ({ id }) => {
             </Divider>
             <SizeSelector
               className="lg:!mr-[262px]"
-              sizes={[
-                { label: "بزرگ", diameter: "", height: "" },
-                { label: "متوسط", diameter: "", height: "" },
-                { label: "کوچک", diameter: "", height: "" },
-              ]}
+              sizes={reduxSizes.map((size) => ({
+                label: size,
+                diameter: "",
+                height: "",
+              }))}
               values={sizes}
               onChange={(v) => {
                 setSizes(v);

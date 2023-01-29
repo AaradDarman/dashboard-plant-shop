@@ -16,19 +16,28 @@ const OrdersToPrint = forwardRef((props, ref) => {
             key={order._id}
             className="flex break-inside-avoid flex-col border-[1px] border-solid border-black p-4 "
           >
-            <span>{order.address.postalAddress}</span>
-            <span>{order.address.postalCode}</span>
-            <span>{`${order.address.receiver.fName} ${order.address.receiver.lName}`}</span>
-            <span>{order.orderNumber}</span>
-            <span>{`${numberWithCommas(order.totalPrice)} تومان`}</span>
-            <span>{getPersianDate(order.createAt)}</span>
-            <span className="flex flex-wrap">
+            <span>
+              آدرس پستی:{" "}
+              {`${order.address.postalAddress} - پلاک ${order.address.plaque}`}
+            </span>
+            <span>کد پستی: {order.address.postalCode}</span>
+            <span>
+              دریافت کننده:{" "}
+              {`${order.address.receiver.fName} ${order.address.receiver.lName}`}
+            </span>
+            <span>شماره سفارش: {order.orderNumber}</span>
+            <span>
+              مبلغ کل: {`${numberWithCommas(order.totalPrice)} تومان`}
+            </span>
+            <span>تاریخ سفارش: {getPersianDate(order.createAt)}</span>
+            <div className="flex flex-wrap">
+              <span className="ml-2">آیتم ها: </span>
               {order.items.map((item) => (
                 <span
                   key={item._id}
                 >{`${item.name} ${item.size} (${item.quantity} عدد)`}</span>
               ))}
-            </span>
+            </div>
           </div>
         ))}
       </div>
