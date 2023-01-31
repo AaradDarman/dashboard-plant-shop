@@ -133,8 +133,7 @@ const Edit = ({ id }) => {
       (value) => {
         return (
           !_.isEmpty(value) &&
-          value.length ===
-            value.map((obj) => obj.quantity).filter(Number).length &&
+          value.length === value.map((obj) => obj.quantity).length &&
           value.length === value.map((obj) => obj.price).filter(Number).length
         );
       }
@@ -173,9 +172,9 @@ const Edit = ({ id }) => {
       validationSchema={AddProductSchema}
       onSubmit={async (values) => {
         let formData = new FormData();
-        // let images = extractImages(name, values.images);
-        for (let i = 0; i < values.images.length; i++) {
-          formData.append(values.images[i].name, values.images[i]);
+        let images = extractImages(values.name, values.images);
+        for (let i = 0; i < images.length; i++) {
+          formData.append(images[i].name, images[i]);
         }
         formData.append(
           "product",
