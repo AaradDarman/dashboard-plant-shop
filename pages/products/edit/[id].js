@@ -172,7 +172,7 @@ const Edit = ({ id }) => {
       validationSchema={AddProductSchema}
       onSubmit={async (values) => {
         let formData = new FormData();
-        let images = extractImages(values.name, values.images);
+        let images = await extractImages(values.name, values.images);
         for (let i = 0; i < images.length; i++) {
           formData.append(images[i].name, images[i]);
         }

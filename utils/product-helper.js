@@ -7,6 +7,13 @@ const renameFile = (originalFile, newName) => {
   });
 };
 
+const urlToObject = async (image) => {
+  const response = await fetch(image);
+  const blob = await response.blob();
+  const file = new File([blob], "image.jpg", { type: blob.type });
+  return file;
+};
+
 /**
  *
  * @param {String} productName - name of product
@@ -14,12 +21,24 @@ const renameFile = (originalFile, newName) => {
  *
  *
  */
+
 export const extractImages = (productName, images) => {
-  let renamedImages = images.map((image, index) =>
-  renameFile(image, `${kebabCase(productName)}-${index + 1}.`)
-  );
-  
-  return renamedImages;
+  return new Promise((res, rej) => {
+    let renamedImages = Promise.all(
+      images.map(async (image, index) => {
+        if (typeof image === "string") {
+          let convertedImage = await urlToObject(image);
+          return renameFile(
+            convertedImage,
+            `${kebabCase(productName)}-${index + 1}.`
+          );
+        }
+        return renameFile(image, `${kebabCase(productName)}-${index + 1}.`);
+      })
+    );
+
+    res(renamedImages);
+  });
 };
 
 export const getMinPrice = (inventory) => {
