@@ -36,7 +36,7 @@ const AddNewLightModal = ({ isOpen, onClose, onAddLight }) => {
 
   const AddNewLightSchema = Yup.object().shape({
     light: Yup.string()
-      .min(3, "دسته بندی وارد شده باید بیشتر از 3 حرف باشد")
+      .min(2, "دسته بندی وارد شده باید بیشتر از 2 حرف باشد")
       .max(90, "دسته بندی وارد شده نباید بیشتر از 90 حرف باشد")
       .required("پر کردن این فیلد الزامی می باشد"),
   });
