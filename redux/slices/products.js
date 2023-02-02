@@ -152,6 +152,28 @@ export const addNewSize = createAsyncThunk(
   }
 );
 
+export const addNewLight = createAsyncThunk(
+  "products/addNewLight",
+  async (light) => {
+    try {
+      const { status, data } = await api.addNewLight(light);
+      console.log(data);
+      if (status === 201) {
+        toast.success("شرایط نوری با موفقیت اضافه شد", {
+          position: "bottom-center",
+          closeOnClick: true,
+        });
+        return data.newLight;
+      }
+    } catch (e) {
+      toast.error(e?.response?.data?.message, {
+        position: "bottom-center",
+        closeOnClick: true,
+      });
+    }
+  }
+);
+
 // Slice
 const slice = createSlice({
   name: "products",
@@ -163,6 +185,7 @@ const slice = createSlice({
     mostExpensive: 0,
     categories: [],
     sizes: [],
+    lights: [],
   },
   reducers: {},
   extraReducers: {
@@ -215,11 +238,19 @@ const slice = createSlice({
     [addNewSize.pending]: (state) => {
       state.status = "creating";
     },
+    [addNewLight.fulfilled]: (state, action) => {
+      state.lights.push(action.payload);
+      state.status = "idle";
+    },
+    [addNewLight.pending]: (state) => {
+      state.status = "creating";
+    },
     [getInitialInfo.fulfilled]: (state, action) => {
       state.cheapest = action.payload?.cheapest;
       state.mostExpensive = action.payload?.mostExpensive;
       state.categories = action.payload?.categories;
       state.sizes = action.payload?.sizes;
+      state.lights = action.payload?.lights;
       state.status = "idle";
     },
     [getInitialInfo.pending]: (state) => {

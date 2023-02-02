@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import {
   addNewCategory,
+  addNewLight,
   addNewProduct,
   addNewSize,
   deleteProduct,
@@ -16,6 +17,7 @@ import DeleteProductModal from "components/modals/DeleteProductModal";
 import LoadingComponent from "components/shared/LoadingComponent";
 import { productContext } from "./product-context";
 import { convetStringToUrlFormat } from "utils/string-helper";
+import AddNewLightModal from "components/modals/AddNewLightModal";
 
 const ProductContext = ({ children }) => {
   const [name, setName] = useState("");
@@ -32,6 +34,7 @@ const ProductContext = ({ children }) => {
     useState(false);
   const [isAddNewCategoryModal, setIsAddNewCategoryModal] = useState(false);
   const [isAddNewSizeModal, setIsAddNewSizeModal] = useState(false);
+  const [isAddNewLightModal, setIsAddNewLightModal] = useState(false);
   const [targetProductForDelete, setTargetProductForDelete] = useState("");
   const { status } = useSelector((state) => state.products);
 
@@ -55,6 +58,13 @@ const ProductContext = ({ children }) => {
   };
   const closeAddNewSizeModal = () => {
     setIsAddNewSizeModal(false);
+  };
+
+  const openAddNewLightModal = () => {
+    setIsAddNewLightModal(true);
+  };
+  const closeAddNewLightModal = () => {
+    setIsAddNewLightModal(false);
   };
 
   const dispatch = useDispatch();
@@ -104,6 +114,14 @@ const ProductContext = ({ children }) => {
       });
   };
 
+  const handleAddNewLight = (light) => {
+    dispatch(addNewLight(light))
+      .unwrap()
+      .then(() => {
+        closeAddNewLightModal();
+      });
+  };
+
   useEffect(() => {
     console.log(status);
   }, [status]);
@@ -134,6 +152,7 @@ const ProductContext = ({ children }) => {
         openDeleteProductModal,
         openAddNewCategoryModal,
         openAddNewSizeModal,
+        openAddNewLightModal,
       }}
     >
       <DeleteProductModal
@@ -150,6 +169,11 @@ const ProductContext = ({ children }) => {
         isOpen={isAddNewSizeModal}
         onClose={closeAddNewSizeModal}
         onAddSize={handleAddNewSize}
+      />
+      <AddNewLightModal
+        isOpen={isAddNewLightModal}
+        onClose={closeAddNewLightModal}
+        onAddLight={handleAddNewLight}
       />
       <LoadingComponent
         show={

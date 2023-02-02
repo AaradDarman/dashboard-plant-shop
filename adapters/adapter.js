@@ -1,10 +1,7 @@
 import http from "./xhr";
 
 const createProduct = (product) => {
-  return http.post(
-    `/api/product/create`,
-    product
-  );
+  return http.post(`/api/product/create`, product);
 };
 
 const getCategories = () => {
@@ -49,21 +46,19 @@ const deleteProduct = (id) => {
 };
 
 const addNewCategory = (category) => {
-  return http.post(
-    `/api/category/create`,
-    category
-  );
+  return http.post(`/api/category/create`, category);
 };
 
 const addNewSize = (size) => {
   return http.post(`/api/size/create`, size);
 };
 
+const addNewLight = (size) => {
+  return http.post(`/api/light/create`, size);
+};
+
 const editProduct = (product) => {
-  return http.put(
-    `/api/product/edit`,
-    product
-  );
+  return http.put(`/api/product/edit`, product);
 };
 const getBasket = (userId) => {
   return http.get(`${process.env.NEXT_PUBLIC_SERVICE_URL}/basket/${userId}`);
@@ -84,4 +79,5 @@ export default {
   getProductsIds,
   addNewCategory,
   addNewSize,
+  addNewLight,
 };

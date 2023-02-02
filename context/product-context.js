@@ -20,4 +20,7 @@ export const productContext = createContext({
   inventory: [],
   setInventory: () => {},
   handleCreateProduct: () => {},
+  openAddNewCategoryModal: () => {},
+  openAddNewSizeModal: () => {},
+  openAddNewLightModal: () => {},
 });

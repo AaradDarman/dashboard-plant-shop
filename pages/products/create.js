@@ -17,12 +17,15 @@ import StockInput from "components/Products/StockInput";
 import PotSizes from "components/Products/PotSizes";
 import Cookies from "cookies";
 import { extractImages } from "utils/product-helper";
+import LightSelector from "components/Products/LightSelector";
 
 const Create = () => {
   const formikRef = useRef(null);
-  const { categories, sizes: reduxSizes } = useSelector(
-    (state) => state.products
-  );
+  const {
+    categories,
+    sizes: reduxSizes,
+    lights,
+  } = useSelector((state) => state.products);
   const {
     name,
     setName,
@@ -99,10 +102,7 @@ const Create = () => {
         );
       }
     ),
-    light: Yup.string()
-      .min(2, "شرایط نوری وارد شده باید بیشتر از 3 حرف باشد")
-      .max(90, "شرایط نوری وارد شده نباید بیشتر از 90 حرف باشد")
-      .required("پر کردن این فیلد الزامی می باشد"),
+    light: Yup.string().required("پر کردن این فیلد الزامی می باشد"),
     watering: Yup.string()
       .min(3, "شرایط آبیاری وارد شده باید بیشتر از 3 حرف باشد")
       .max(90, "شرایط آبیاری وارد شده نباید بیشتر از 90 حرف باشد"),
@@ -133,7 +133,7 @@ const Create = () => {
       validationSchema={AddProductSchema}
       onSubmit={async (values) => {
         let formData = new FormData();
-        let images = extractImages(values.name, values.images);
+        let images = await extractImages(values.name, values.images);
         for (let i = 0; i < images.length; i++) {
           formData.append(images[i].name, images[i]);
         }
@@ -364,39 +364,17 @@ const Create = () => {
               >
                 شرایط نگه داری
               </Divider>
-              <TextField
-                variant="outlined"
-                label="نور"
-                size="small"
-                margin="dense"
-                required
+              <LightSelector
+                lights={lights}
                 value={light}
-                onChange={(e) => {
-                  setLight(e.target.value);
-                  setFieldValue("light", e.target.value);
+                className="lg:!mr-[262px]"
+                onChange={(v) => {
+                  setLight(v);
+                  setFieldValue("light", v);
                 }}
                 onBlur={handleBlur("light")}
                 error={errors.light && touched.light}
                 helperText={errors.light && touched.light ? errors.light : " "}
-                className="lg:!mr-[262px]"
-                sx={{
-                  "& label.Mui-focused": {
-                    color: "accent.main",
-                  },
-                  "& label.Mui-focused.Mui-error": {
-                    color: "error.main",
-                  },
-                  "& .MuiOutlinedInput-root": {
-                    "&.Mui-focused fieldset": {
-                      borderColor: "accent.main",
-                    },
-                    "&.MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline":
-                      {
-                        borderColor: "error.main",
-                      },
-                  },
-                }}
-                inputProps={{ className: "bg-transparent" }}
               />
               <TextField
                 variant="outlined"
