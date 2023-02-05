@@ -40,6 +40,36 @@ export const getProducts = createAsyncThunk(
   }
 );
 
+export const getProductsInventory = createAsyncThunk(
+  "products/get-inventory",
+  async ({ page, search, sortBy, desc, status: queryStatus, itemsPerPage }) => {
+    try {
+      const { status, data } = await api.getProductsInventory({
+        page,
+        search,
+        sortBy,
+        desc,
+        status: queryStatus,
+        itemsPerPage,
+      });
+      if (status === 200) {
+        return data;
+      }
+    } catch (e) {
+      if (!e.response) {
+        throw e;
+      }
+      if (e.response.status != 500) {
+        toast.error(e?.response?.data?.message, {
+          position: "bottom-center",
+          closeOnClick: true,
+        });
+      }
+      return rejectWithValue(e?.response?.data);
+    }
+  }
+);
+
 export const addNewProduct = createAsyncThunk(
   "products/addProduct",
   async (formData, { rejectWithValue }) => {
@@ -186,6 +216,8 @@ const slice = createSlice({
     categories: [],
     sizes: [],
     lights: [],
+    inventory: [],
+    inventoryCount: 0,
   },
   reducers: {},
   extraReducers: {
@@ -196,6 +228,17 @@ const slice = createSlice({
     },
     [getProducts.pending]: (state) => {
       state.status = "loading";
+    },
+    [getProductsInventory.fulfilled]: (state, action) => {
+      state.inventory = action.payload.inventory;
+      state.inventoryCount = action.payload.totalCount;
+      state.status = "idle";
+    },
+    [getProductsInventory.pending]: (state) => {
+      state.status = "loading";
+    },
+    [getProductsInventory.rejected]: (state) => {
+      state.status = "idle";
     },
     [addNewProduct.fulfilled]: (state, action) => {
       state.entity.unshift(action.payload);

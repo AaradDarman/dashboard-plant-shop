@@ -20,6 +20,12 @@ const getProducts = (query) => {
   });
 };
 
+const getProductsInventory = (query) => {
+  return http.get(`/api/products/inventory`, {
+    params: query,
+  });
+};
+
 const getProductsIds = () => {
   return http.get(`${process.env.NEXT_PUBLIC_SERVICE_URL}/products/ids`);
 };
@@ -68,6 +74,7 @@ const getBasket = (userId) => {
 export default {
   createProduct,
   getProducts,
+  getProductsInventory,
   getProductsByCategory,
   getProduct,
   updateProductViewCount,

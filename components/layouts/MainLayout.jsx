@@ -183,6 +183,26 @@ const MainLayout = ({ children }) => {
           </li>
           <li
             className={`menu-item${
+              router.pathname.includes("/inventory") ? " active" : ""
+            }`}
+          >
+            <Link href="/inventory">
+              <a>
+                <Icon
+                  className="icon"
+                  icon={`${
+                    router.pathname === "/inventory"
+                      ? "inventory-filled"
+                      : "inventory"
+                  }`}
+                  size={24}
+                />
+                <span>موجودی محصولات</span>
+              </a>
+            </Link>
+          </li>
+          <li
+            className={`menu-item${
               router.pathname === "/orders" ? " active" : ""
             }`}
           >
