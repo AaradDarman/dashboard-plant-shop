@@ -26,6 +26,14 @@ const getProductsInventory = (query) => {
   });
 };
 
+const outOfStockProduct = (product) => {
+  return http.post(`/api/product/outofstock`, { product });
+};
+
+const chargeProductQuantity = (payload) => {
+  return http.put(`/api/product/charge-quantity`, payload);
+};
+
 const getProductsIds = () => {
   return http.get(`${process.env.NEXT_PUBLIC_SERVICE_URL}/products/ids`);
 };
@@ -87,4 +95,6 @@ export default {
   addNewCategory,
   addNewSize,
   addNewLight,
+  outOfStockProduct,
+  chargeProductQuantity,
 };

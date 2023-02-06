@@ -14,4 +14,6 @@ export const inventoryContext = createContext({
   onlyOutOfStock: false,
   setOnlyOutOfStock: () => {},
   handlePageChange: () => {},
+  openOutOfStockModal: () => {},
+  openChargeQuantityModal: () => {},
 });

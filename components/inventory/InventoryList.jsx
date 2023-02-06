@@ -276,6 +276,8 @@ const InventoryList = ({ onRemoveItem }) => {
     handlePageChange,
     setOnlyOutOfStock,
     onlyOutOfStock,
+    openOutOfStockModal,
+    openChargeQuantityModal,
   } = useContext(inventoryContext);
 
   const handleRequestSort = (event, property) => {
@@ -362,13 +364,13 @@ const InventoryList = ({ onRemoveItem }) => {
                       <StyledTableCell align="center">
                         <span
                           className={`rounded-md px-2 ${
-                            item.quantity >= 5 &&
+                            item.quantity >= 10 &&
                             "bg-[#a47d06]/[.2] text-[#a47d06]"
                           } ${
-                            item.quantity < 5 &&
+                            item.quantity < 10 &&
                             "bg-[#db3131]/[.2] text-[#db3131]"
                           } ${
-                            item.quantity > 5 &&
+                            item.quantity > 20 &&
                             "bg-[#16a34a]/[.2] text-[#16a34a]"
                           }`}
                         >
@@ -445,8 +447,7 @@ const InventoryList = ({ onRemoveItem }) => {
                         >
                           <MenuItem
                             onClick={() => {
-                              console.log("fasd");
-                              // openExpireDiscountModal(discount);
+                              openChargeQuantityModal(item);
                               handleClose();
                             }}
                           >
@@ -455,8 +456,7 @@ const InventoryList = ({ onRemoveItem }) => {
                           </MenuItem>
                           <MenuItem
                             onClick={() => {
-                              console.log("fasd");
-                              // openExpireDiscountModal(discount);
+                              openOutOfStockModal(item);
                               handleClose();
                             }}
                           >

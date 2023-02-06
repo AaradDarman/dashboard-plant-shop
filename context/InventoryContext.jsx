@@ -10,6 +10,12 @@ import LoadingComponent from "components/shared/LoadingComponent";
 import CancelOrderModal from "components/modals/CancelOrderModal";
 import { cancelOrders, getOrders, sendOrders } from "redux/slices/orders";
 import SendOrderModal from "components/modals/SendOrderModal";
+import OutOfStockProductModal from "components/modals/OutOfStockProductModal";
+import ChargeProductQuantityModal from "components/modals/ChargeProductQuantityModal";
+import {
+  ChargeProductQuantity,
+  OutOfStockProduct,
+} from "redux/slices/products";
 
 const InventoryContext = ({ children }) => {
   const [order, setOrder] = useState("asc");
@@ -19,15 +25,42 @@ const InventoryContext = ({ children }) => {
   const [search, setSearch] = useState("");
   const [onlyOutOfStock, setOnlyOutOfStock] = useState(false);
 
-  const [isCancelOrderModalOpen, setIsCancelOrderModalOpen] = useState(false);
-  const [isSendOrderModalOpen, setIsSendOrderModalOpen] = useState(false);
-  const [targetOrders, setTargetOrders] = useState([]);
-  const [targetOrder, setTargetOrder] = useState({});
+  const [isOutOfStockModalOpen, setIsOutOfStockModalOpen] = useState(false);
+  const [isChargeQuantityOpen, setIsChargeQuantityOpen] = useState(false);
+  const [targetProduct, setTargetProduct] = useState({});
   const dispatch = useDispatch();
   const { status } = useSelector((state) => state.products);
 
+  const openOutOfStockModal = (product) => {
+    setTargetProduct(product);
+    setIsOutOfStockModalOpen(true);
+  };
+  const closeOutOfStockModal = () => {
+    setIsOutOfStockModalOpen(false);
+  };
+
+  const openChargeQuantityModal = (product) => {
+    setTargetProduct(product);
+    setIsChargeQuantityOpen(true);
+  };
+  const closeChargeQuantityModal = () => {
+    setIsChargeQuantityOpen(false);
+  };
+
   const handlePageChange = (event, newPage) => {
     setPage(newPage);
+  };
+
+  const handleOutOfStock = () => {
+    dispatch(OutOfStockProduct(targetProduct));
+    closeOutOfStockModal();
+  };
+
+  const handleChargeQuantity = ({ quantity }) => {
+    dispatch(
+      ChargeProductQuantity({ addedQuantity: quantity, product: targetProduct })
+    );
+    closeChargeQuantityModal();
   };
 
   return (
@@ -46,22 +79,24 @@ const InventoryContext = ({ children }) => {
         onlyOutOfStock,
         setOnlyOutOfStock,
         handlePageChange,
+        openOutOfStockModal,
+        openChargeQuantityModal,
       }}
     >
       {children}
-      {/* <CancelOrderModal
-        targetOrders={targetOrders}
-        isOpen={isCancelOrderModalOpen}
-        onClose={closeCancelOrderModal}
-        onCancelClick={handleCancelOrder}
+      <OutOfStockProductModal
+        targetProduct={targetProduct}
+        isOpen={isOutOfStockModalOpen}
+        onClose={closeOutOfStockModal}
+        onSave={handleOutOfStock}
       />
-      <SendOrderModal
-        targetOrder={targetOrder}
-        isOpen={isSendOrderModalOpen}
-        onClose={closeSendOrderModal}
-        onSend={handleSendOrder}
+      <ChargeProductQuantityModal
+        targetProduct={targetProduct}
+        isOpen={isChargeQuantityOpen}
+        onClose={closeChargeQuantityModal}
+        onSave={handleChargeQuantity}
       />
-      <LoadingComponent show={status === "canceling" || status === "sending"} /> */}
+      <LoadingComponent show={status === "updating" || status === "charging"} />
     </inventoryContext.Provider>
   );
 };

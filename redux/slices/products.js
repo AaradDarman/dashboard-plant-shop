@@ -70,6 +70,63 @@ export const getProductsInventory = createAsyncThunk(
   }
 );
 
+export const OutOfStockProduct = createAsyncThunk(
+  "products/outofstock",
+  async (product, { rejectWithValue }) => {
+    try {
+      const { status, data } = await api.outOfStockProduct(product);
+      if (status === 200) {
+        toast.success("با موفقیت ذخیره شد", {
+          position: "bottom-center",
+          closeOnClick: true,
+        });
+        return data.product;
+      }
+    } catch (e) {
+      if (!e.response) {
+        throw e;
+      }
+      if (e.response.status != 500) {
+        toast.error(e?.response?.data?.message, {
+          position: "bottom-center",
+          closeOnClick: true,
+        });
+      }
+      return rejectWithValue(e?.response?.data);
+    }
+  }
+);
+
+export const ChargeProductQuantity = createAsyncThunk(
+  "products/charge-product-quantity",
+  async ({ addedQuantity, product }, { rejectWithValue }) => {
+    try {
+      const { status, data } = await api.chargeProductQuantity({
+        addedQuantity,
+        product,
+      });
+      if (status === 200) {
+        toast.success("با موفقیت ذخیره شد", {
+          position: "bottom-center",
+          closeOnClick: true,
+        });
+        return data.product;
+      }
+    } catch (e) {
+      if (!e.response) {
+        throw e;
+      }
+      if (e.response.status != 500) {
+        toast.error(e?.response?.data?.message, {
+          position: "bottom-center",
+          closeOnClick: true,
+        });
+      }
+      return rejectWithValue(e?.response?.data);
+    }
+  }
+);
+
 export const addNewProduct = createAsyncThunk(
   "products/addProduct",
   async (formData, { rejectWithValue }) => {
@@ -238,6 +295,36 @@ const slice = createSlice({
       state.status = "loading";
     },
     [getProductsInventory.rejected]: (state) => {
+      state.status = "idle";
+    },
+    [OutOfStockProduct.fulfilled]: (state, action) => {
+      let productIndex = state?.inventory?.findIndex(
+        (p) =>
+          p?.productId === action.payload?.productId &&
+          p?.size === action.payload?.size
+      );
+      state.inventory[productIndex] = action.payload;
+      state.status = "idle";
+    },
+    [OutOfStockProduct.pending]: (state) => {
+      state.status = "updating";
+    },
+    [OutOfStockProduct.rejected]: (state, action) => {
+      state.status = "idle";
+    },
+    [ChargeProductQuantity.fulfilled]: (state, action) => {
+      let productIndex = state?.inventory?.findIndex(
+        (p) =>
+          p?.productId === action.payload?.productId &&
+          p?.size === action.payload?.size
+      );
+      state.inventory[productIndex] = action.payload;
+      state.status = "idle";
+    },
+    [ChargeProductQuantity.pending]: (state) => {
+      state.status = "charging";
+    },
+    [ChargeProductQuantity.rejected]: (state, action) => {
       state.status = "idle";
     },
     [addNewProduct.fulfilled]: (state, action) => {
