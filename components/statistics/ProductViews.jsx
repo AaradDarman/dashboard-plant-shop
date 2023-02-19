@@ -172,7 +172,7 @@ const ProductViews = ({ className }) => {
   return (
     <StyledWraper
       sx={{ boxShadow: "none" }}
-      className={`${className} relative min-h-[357px] rounded-[4px] border-[1px] border-secondary-dark-800 px-2`}
+      className={`${className} relative h-[357px] rounded-[4px] border-[1px] border-secondary-dark-800 px-2`}
     >
       <div className="flex items-center justify-between">
         <Typography variant="h6" className="!my-2 !text-right !text-[16px] ">
