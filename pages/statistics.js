@@ -17,8 +17,8 @@ const Reports = () => {
         <title>گزارشات</title>
       </Head>
       <div className="grid grid-cols-12 gap-2">
-        <LoyalCustomers className="col-span-12 lg:col-span-3" />
-        <ProductViews className="col-span-12 lg:col-span-9" />
+        <LoyalCustomers className="col-span-12 h-[357px] lg:col-span-3" />
+        <ProductViews className="col-span-12 h-[357px] lg:col-span-9" />
         <RecentTransactions className="col-span-full h-[270px] lg:col-span-7" />
         <TopProducts className="col-span-full h-[270px] lg:col-span-5" />
       </div>
