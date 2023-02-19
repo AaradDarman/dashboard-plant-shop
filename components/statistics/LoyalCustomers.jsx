@@ -60,7 +60,7 @@ const LoyalCustomers = ({ className }) => {
       <Typography variant="h6" className="!my-2 !text-right !text-[16px]">
         مشتریان وفادار
       </Typography>
-      {status === "loading" ? (
+      {status === "loading" && entity.length === 0 ? (
         <PulseLoader
           size={6}
           color={theme.palette.accent.main}
