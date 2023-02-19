@@ -55,7 +55,7 @@ const LoyalCustomers = ({ className }) => {
       {...breakPoints}
       ref={parentRef}
       style={{ direction: "ltr" }}
-      className={`${className} overflow-y-auto rounded-[4px] border-[1px] border-secondary-dark-800 px-2`}
+      className={`${className} relative overflow-y-auto rounded-[4px] border-[1px] border-secondary-dark-800 px-2`}
     >
       <Typography variant="h6" className="!my-2 !text-right !text-[16px]">
         مشتریان وفادار
