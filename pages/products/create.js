@@ -162,7 +162,7 @@ const Create = () => {
         handleSubmit,
       }) => {
         return (
-          <>
+          <div className="rounded-[4px] border-[1px] border-secondary-dark-800">
             <Head>
               <title>محصولات | افزودن محصول</title>
             </Head>
@@ -498,7 +498,7 @@ const Create = () => {
                 ذخیره محصول
               </Button>
             </div>
-          </>
+          </div>
         );
       }}
     </Formik>

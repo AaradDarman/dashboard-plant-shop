@@ -84,7 +84,11 @@ const SelectProductsForDiscountModal = ({
   };
 
   const isSelected = (selectedProduct) =>
-    selected.some((product) => product._id === selectedProduct._id);
+    selected.some(
+      (product) =>
+        product.name === selectedProduct.name &&
+        product.size === selectedProduct.size
+    );
 
   return (
     <Modal

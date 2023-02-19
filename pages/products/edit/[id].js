@@ -44,7 +44,7 @@ const Edit = ({ id }) => {
     setInventory,
     handleEditProduct,
   } = useContext(productContext);
-  
+
   const { categories, sizes: reduxSizes } = useSelector(
     (state) => state.products
   );
@@ -201,7 +201,7 @@ const Edit = ({ id }) => {
         setFieldValue,
         handleSubmit,
       }) => (
-        <>
+        <div className="rounded-[4px] border-[1px] border-secondary-dark-800">
           <Head>
             <title>محصولات | ویرایش محصول</title>
           </Head>
@@ -556,7 +556,7 @@ const Edit = ({ id }) => {
               ذخیره تغییرات
             </Button>
           </div>
-        </>
+        </div>
       )}
     </Formik>
   );

@@ -81,7 +81,7 @@ const Discounts = () => {
   }, [selectedForDiscount]);
 
   return (
-    <div className="flex min-h-[calc(100vh_-_34px)] flex-col">
+    <div className="flex min-h-[calc(100vh_-_34px)] flex-col rounded-[4px] border-[1px] border-secondary-dark-800">
       <Formik
         innerRef={formikRef}
         initialValues={{

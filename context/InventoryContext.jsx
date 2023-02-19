@@ -21,7 +21,7 @@ const InventoryContext = ({ children }) => {
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("quantity");
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(7);
+  const [rowsPerPage, setRowsPerPage] = useState(8);
   const [search, setSearch] = useState("");
   const [onlyOutOfStock, setOnlyOutOfStock] = useState(false);
 

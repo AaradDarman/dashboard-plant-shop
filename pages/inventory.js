@@ -32,6 +32,7 @@ const Inventory = () => {
         status: onlyOutOfStock ? "out-of-stock" : undefined,
       })
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, debouncedSeasrchTerm, onlyOutOfStock, orderBy, order]);
 
   return (
@@ -39,7 +40,7 @@ const Inventory = () => {
       <Head>
         <title>لیست موجودی</title>
       </Head>
-      <div>
+      <div className="rounded-[4px] border-[1px] border-secondary-dark-800">
         <InventoryList />
       </div>
     </>

@@ -45,6 +45,9 @@ import cancelledImg from "public/images/order-cancelled.png";
 import OrderContext from "context/OrderContext";
 import { orderContext } from "context/order-context";
 import Cookies from "cookies";
+import SearchInput from "components/shared/SearchInput";
+import { useDebounce } from "components/hooks/useDebounce";
+import { StyledTableCell } from "components/shared/StyledTableCell";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -137,6 +140,7 @@ function EnhancedTableHead(props) {
               "aria-label": "select all desserts",
             }}
             sx={{
+              padding: "4px",
               "&.Mui-checked": {
                 color: (theme) =>
                   theme.palette.mode === "dark" ? "accent.main" : "accent.600",
@@ -174,38 +178,21 @@ function EnhancedTableHead(props) {
   );
 }
 
-const StyledInputWraper = styled.form`
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid ${({ theme }) => theme.palette.accent.main};
-  background-color: ${({ theme }) => theme.palette.secondary.main};
-  padding: 10px 4px;
-`;
-
-const StyledInput = styled.input`
-  all: unset;
-  padding: 2px 4px;
-  color: ${({ theme }) => theme.palette.text.primary};
-  ::placeholder {
-    font-size: 14px;
-  }
-`;
-
 function EnhancedTableToolbar(props) {
   const {
     numSelected,
     selected,
     search,
     setSearch,
-    handleSearchChange,
     isLoading,
     count,
-    handleOnlyInProgressChange,
+    setOnlyInProgress,
     handleCancelOrder,
     handleSendOrder,
     onlyInProgress,
     contentForPrintElem,
     theme,
+    setPage,
   } = props;
 
   return (
@@ -237,38 +224,15 @@ function EnhancedTableToolbar(props) {
         </Typography>
       )}
       {numSelected === 0 && (
-        <StyledInputWraper
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleSearchChange(search);
+        <SearchInput
+          className="mx-2 my-2 ml-auto"
+          value={search}
+          onChange={(val) => {
+            setPage(0);
+            setSearch(val);
           }}
-          className="mx-2 my-2 ml-auto rounded-sm"
-        >
-          <Icon
-            icon="search"
-            size={24}
-            onClick={() => {
-              if (search) handleSearchChange(search);
-            }}
-          />
-          <StyledInput
-            type="text"
-            onChange={(e) => setSearch(e.target.value)}
-            value={search ?? ""}
-            placeholder="شماره سفارش را وارد کنید..."
-            className="!flex-1"
-          />
-          {search && (
-            <Icon
-              icon="remove"
-              size={24}
-              onClick={() => {
-                setSearch("");
-                handleSearchChange("");
-              }}
-            />
-          )}
-        </StyledInputWraper>
+          placeholder="شماره سفارش را وارد کنید..."
+        />
       )}
 
       {numSelected > 0 ? (
@@ -354,7 +318,7 @@ function EnhancedTableToolbar(props) {
             label="فقط در حال پردازش"
             sx={{ "& .MuiFormControlLabel-label": { fontSize: "13px" } }}
             checked={onlyInProgress}
-            onChange={(e) => handleOnlyInProgressChange(e.target.checked)}
+            onChange={(e) => setOnlyInProgress(e.target.checked)}
           />
           <div className="flex items-center text-[13px]">
             {isLoading ? (
@@ -397,17 +361,6 @@ function EnhancedTableRow({ selected, children, ...otherProps }) {
     </TableRow>
   );
 }
-
-const StyledTableCell = muiStyled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: "transparent",
-    borderColor: "rgba(255, 255, 255, 0.23)",
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-    borderColor: "rgba(255, 255, 255, 0.23)",
-  },
-}));
 
 const ToBeStyledTooltip = ({ className, ...props }) => (
   <Tooltip {...props} classes={{ tooltip: className }} />
@@ -453,6 +406,7 @@ const Orders = () => {
     setOnlyInProgress,
     openCancelOrderModal,
     openSendOrderModal,
+    handlePageChange,
   } = useContext(orderContext);
 
   const handleRequestSort = (event, property) => {
@@ -489,56 +443,14 @@ const Orders = () => {
     setSelected(newSelected);
   };
 
-  const handleChangePage = (event, newPage) => {
-    dispatch(
-      getOrders({
-        page: newPage + 1,
-        search,
-        sortBy: orderBy,
-        desc: order === "desc" ? true : false,
-        itemsPerPage: rowsPerPage,
-      })
-    );
-    setPage(newPage);
-  };
-
-  const handleSearchChange = (search) => {
-    dispatch(
-      getOrders({
-        page: page + 1,
-        search,
-        sortBy: orderBy,
-        desc: order === "desc" ? true : false,
-        itemsPerPage: rowsPerPage,
-      })
-    );
-  };
-
-  const handleOnlyInProgressChange = (isChecked) => {
-    setOnlyInProgress(isChecked);
-    dispatch(
-      getOrders({
-        page: page + 1,
-        search,
-        sortBy: orderBy,
-        status: isChecked ? "in-progress" : undefined,
-        desc: order === "desc" ? true : false,
-        itemsPerPage: rowsPerPage,
-      })
-    );
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
   const isSelected = (selectedOrder) =>
     selected.some((order) => order._id === selectedOrder._id);
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - count) : 0;
+
+  let debouncedSeasrchTerm = useDebounce(search, 500);
 
   useEffect(() => {
     dispatch(
@@ -548,15 +460,16 @@ const Orders = () => {
         sortBy: orderBy,
         desc: order === "desc" ? true : false,
         itemsPerPage: rowsPerPage,
+        status: onlyInProgress ? "in-progress" : undefined,
       })
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [page, debouncedSeasrchTerm, orderBy, onlyInProgress, order]);
 
   const contentForPrintElem = useRef(null);
 
   return (
-    <>
+    <div className="rounded-[4px] border-[1px] border-secondary-dark-800">
       <Head>
         <title>سفارش ها</title>
       </Head>
@@ -576,16 +489,16 @@ const Orders = () => {
           selected={selected}
           search={search}
           setSearch={setSearch}
-          handleSearchChange={handleSearchChange}
+          setPage={setPage}
           isLoading={status === "loading"}
           count={count}
-          handleOnlyInProgressChange={handleOnlyInProgressChange}
+          setOnlyInProgress={setOnlyInProgress}
           onlyInProgress={onlyInProgress}
           handleCancelOrder={() => openCancelOrderModal(selected)}
           handleSendOrder={() => openSendOrderModal(selected[0])}
           contentForPrintElem={contentForPrintElem}
         />
-        <TableContainer sx={{ minHeight: 600 }}>
+        <TableContainer sx={{ minHeight: 504 }}>
           <Table aria-labelledby="tableTitle">
             <EnhancedTableHead
               numSelected={selected.length}
@@ -632,6 +545,7 @@ const Orders = () => {
                               "aria-labelledby": labelId,
                             }}
                             sx={{
+                              padding: "4px",
                               "&.Mui-checked": {
                                 color: (theme) =>
                                   theme.palette.mode === "dark"
@@ -695,8 +609,7 @@ const Orders = () => {
           count={count}
           rowsPerPage={rowsPerPage}
           page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
+          onPageChange={handlePageChange}
           labelDisplayedRows={({ from, to, count }) => {
             return (
               <span>{`${from}-${to} از ${
@@ -707,7 +620,7 @@ const Orders = () => {
           labelRowsPerPage="تعداد رکورد در هر صفحه"
         />
       </Paper>
-    </>
+    </div>
   );
 };
 

@@ -16,7 +16,7 @@ const StyledBox = styled.div`
   flex-direction: column;
   border-radius: 4px;
   padding: 20px;
-  min-height: 180px;
+  min-height: 156px;
   justify-content: space-between;
   background-color: ${({ growth }) =>
     growth > 0
@@ -42,10 +42,12 @@ const OverviewShop = () => {
   useEffect(() => {
     // dispatch(getIncome(incomeRange));
     dispatch(getFinancialStatistics());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     dispatch(getIncome(incomeRange));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [incomeRange]);
 
   return (

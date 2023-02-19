@@ -43,6 +43,10 @@ const OrderContext = ({ children }) => {
     setIsSendOrderModalOpen(false);
   };
 
+  const handlePageChange = (event, newPage) => {
+    setPage(newPage);
+  };
+
   const handleCancelOrder = () => {
     dispatch(cancelOrders(targetOrders.map((order) => order._id)))
       .unwrap()
@@ -80,6 +84,7 @@ const OrderContext = ({ children }) => {
         setOnlyInProgress,
         openCancelOrderModal,
         openSendOrderModal,
+        handlePageChange,
       }}
     >
       {children}

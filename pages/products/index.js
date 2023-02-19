@@ -62,7 +62,7 @@ const Products = () => {
   }, [count]);
 
   return (
-    <>
+    <div className="rounded-[4px] border-[1px] border-secondary-dark-800">
       <Head>
         <title>محصولات</title>
       </Head>
@@ -106,7 +106,7 @@ const Products = () => {
         products={entity}
         className="px-4"
       />
-    </>
+    </div>
   );
 };
 

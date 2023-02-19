@@ -14,7 +14,7 @@ export default function Home({ ...otherProps }) {
       </Head>
       <div
         style={{ minHeight: "calc(100vh - 66px)" }}
-        className="relative grid flex-1 grid-cols-1 gap-1 lg:grid-cols-2"
+        className="relative grid flex-1 grid-cols-1 gap-1 rounded-[4px] border-[1px] border-secondary-dark-800 lg:grid-cols-2"
       >
         <OverviewShop />
         <LatestOrders />

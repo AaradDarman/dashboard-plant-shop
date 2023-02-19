@@ -35,6 +35,8 @@ import { visuallyHidden } from "@mui/utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
+import EnhancedTableHead from "components/shared/EnhancedTableHead";
+import SearchInput from "components/shared/SearchInput";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -82,44 +84,13 @@ const headCells = [
     disablePadding: false,
     label: "موجودی",
   },
+  {
+    id: "empty",
+    disablePadding: false,
+    label: "",
+  },
 ];
 
-function EnhancedTableHead(props) {
-  const { order, orderBy, onRequestSort } = props;
-  const createSortHandler = (property) => (event) => {
-    onRequestSort(event, property);
-  };
-
-  return (
-    <TableHead>
-      <TableRow sx={{ bgcolor: "primary.main" }}>
-        {headCells.map((headCell) => (
-          <StyledTableCell
-            key={headCell.id}
-            align={headCell.id === "status" ? "left" : "center"}
-            padding={headCell.disablePadding ? "none" : "normal"}
-            sortDirection={orderBy === headCell.id ? order : false}
-          >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : "asc"}
-              onClick={createSortHandler(headCell.id)}
-              className="!-translate-x-3"
-            >
-              {headCell.label}
-              {orderBy === headCell.id ? (
-                <Box component="span" sx={visuallyHidden}>
-                  {order === "desc" ? "sorted descending" : "sorted ascending"}
-                </Box>
-              ) : null}
-            </TableSortLabel>
-          </StyledTableCell>
-        ))}
-        <StyledTableCell></StyledTableCell>
-      </TableRow>
-    </TableHead>
-  );
-}
 
 const StyledInputWraper = styled.form`
   display: flex;
@@ -142,6 +113,7 @@ function EnhancedTableToolbar(props) {
   const {
     search,
     setSearch,
+    setPage,
     isLoading,
     count,
     setOnlyOutOfStock,
@@ -155,39 +127,17 @@ function EnhancedTableToolbar(props) {
         pl: { sm: 2 },
         pr: { xs: 1, sm: 1 },
       }}
+      className="!min-h-fit"
     >
-      <StyledInputWraper
-        onSubmit={(e) => {
-          e.preventDefault();
-          setSearch(search);
+      <SearchInput
+        className="mx-2 my-2 ml-auto"
+        value={search}
+        onChange={(val) => {
+          setPage(0);
+          setSearch(val);
         }}
-        className="mx-2 my-2 ml-auto rounded-sm"
-      >
-        <Icon
-          icon="search"
-          size={24}
-          onClick={() => {
-            if (search) setSearch(search);
-          }}
-        />
-        <StyledInput
-          type="text"
-          onChange={(e) => setSearch(e.target.value)}
-          value={search ?? ""}
-          placeholder="نام محصول را وارد کنید..."
-          className="!flex-1"
-        />
-        {search && (
-          <Icon
-            icon="remove"
-            size={24}
-            onClick={() => {
-              setSearch("");
-              setSearch("");
-            }}
-          />
-        )}
-      </StyledInputWraper>
+        placeholder='نام محصول را وارد کنید ...'
+      />
       <>
         <FormControlLabel
           control={<Switch color="accent" />}
@@ -197,21 +147,15 @@ function EnhancedTableToolbar(props) {
           onChange={(e) => setOnlyOutOfStock(e.target.checked)}
         />
         <div className="flex items-center text-[13px]">
-          {isLoading ? (
-            <PulseLoader
-              size={6}
-              color={theme.palette.accent.main}
-              loading={true}
-            />
-          ) : (
-            count ?? (
+          <span className="ml-1">
+            {count ?? (
               <PulseLoader
                 size={6}
                 color={theme.palette.accent.main}
                 loading={true}
               />
-            )
-          )}
+            )}
+          </span>
           آیتم
         </div>
       </>
@@ -272,6 +216,7 @@ const InventoryList = ({ onRemoveItem }) => {
     search,
     setSearch,
     page,
+    setPage,
     rowsPerPage,
     handlePageChange,
     setOnlyOutOfStock,
@@ -298,13 +243,11 @@ const InventoryList = ({ onRemoveItem }) => {
 
   return (
     <>
-      <Typography variant="h6" id="tableTitle" component="div">
-        موجودی محصولات
-      </Typography>
       <EnhancedTableToolbar
         theme={theme}
         search={search}
         setSearch={setSearch}
+        setPage={setPage}
         isLoading={status === "loading"}
         count={inventoryCount}
         setOnlyOutOfStock={setOnlyOutOfStock}
@@ -320,7 +263,7 @@ const InventoryList = ({ onRemoveItem }) => {
           backgroundColor: "transparent",
           backgroundImage: "none",
           boxShadow: "none",
-          minHeight: 472,
+          minHeight: 521,
         }}
         component={Paper}
       >
@@ -329,6 +272,7 @@ const InventoryList = ({ onRemoveItem }) => {
             order={order}
             orderBy={orderBy}
             onRequestSort={handleRequestSort}
+            headCells={headCells}
           />
           <TableBody>
             {status === "loading" ? (
@@ -340,7 +284,7 @@ const InventoryList = ({ onRemoveItem }) => {
               />
             ) : inventory.length == 0 ? (
               <span className="absolute top-[50%] left-[50%] -translate-y-[50%] -translate-x-[50%] text-[14px] text-gray-400">
-                سفارشی ثبت نشده است
+                آیتمی یافت نشد
               </span>
             ) : (
               stableSort(inventory, getComparator(order, orderBy)).map(

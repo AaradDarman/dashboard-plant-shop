@@ -28,7 +28,7 @@ const Discount = ({ title }) => {
   }, []);
 
   return (
-    <>
+    <div className="rounded-[4px] border-[1px] border-secondary-dark-800">
       <Head>
         <title>{`تخفیفات | ${title}`}</title>
       </Head>
@@ -38,7 +38,9 @@ const Discount = ({ title }) => {
         </IconButton>
         <Typography variant="body1">
           تخفیف
-          <span className="mr-1 inline-block text-accent-600">{discount.title}</span>
+          <span className="mr-1 inline-block text-accent-600">
+            {discount.title}
+          </span>
         </Typography>
       </div>
       <Typography variant="subtitle1" className="!px-3">
@@ -79,7 +81,7 @@ const Discount = ({ title }) => {
           ))
         )}
       </div>
-    </>
+    </div>
   );
 };
 
