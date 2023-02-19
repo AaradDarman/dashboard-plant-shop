@@ -53,60 +53,67 @@ const LoyalCustomers = ({ className }) => {
   return (
     <div
       {...breakPoints}
-      ref={parentRef}
       style={{ direction: "ltr" }}
-      className={`${className} relative overflow-y-auto rounded-[4px] border-[1px] border-secondary-dark-800 px-2`}
+      className={`${className} relative flex flex-col overflow-hidden rounded-[4px] border-[1px] border-secondary-dark-800`}
     >
-      <Typography variant="h6" className="!my-2 !text-right !text-[16px]">
+      <Typography variant="h6" className="!my-2 !px-2 !text-right !text-[16px]">
         مشتریان وفادار
       </Typography>
-      {status === "loading" && entity.length === 0 ? (
-        <PulseLoader
-          size={6}
-          color={theme.palette.accent.main}
-          loading={true}
-          className="absolute top-[50%] left-[50%] z-10 -translate-y-[50%] -translate-x-[50%]"
-        />
-      ) : entity.length == 0 ? (
-        <span className="absolute top-[50%] left-[50%] -translate-y-[50%] -translate-x-[50%] text-[14px] text-gray-400">
-          لیست خالی می باشد
-        </span>
-      ) : (
-        entity?.map((client) => (
-          <div
-            className="flex justify-between py-2"
-            style={{ direction: "rtl" }}
-            key={client._id}
-          >
-            <div className="flex flex-col">
-              <Typography variant="subtitle2">{`${client.fName} ${client.lName}`}</Typography>
-              <Typography variant="caption" className="ml-[4px] text-gray-400">
-                {client.email}
-              </Typography>
+      <div ref={parentRef} className="flex-1 overflow-y-auto">
+        {status === "loading" && entity.length === 0 ? (
+          <PulseLoader
+            size={6}
+            color={theme.palette.accent.main}
+            loading={true}
+            className="absolute top-[50%] left-[50%] z-10 -translate-y-[50%] -translate-x-[50%]"
+          />
+        ) : entity.length == 0 ? (
+          <span className="absolute top-[50%] left-[50%] -translate-y-[50%] -translate-x-[50%] text-[14px] text-gray-400">
+            لیست خالی می باشد
+          </span>
+        ) : (
+          entity?.map((client) => (
+            <div
+              className="flex justify-between py-2 px-2"
+              style={{ direction: "rtl" }}
+              key={client._id}
+            >
+              <div className="flex flex-col">
+                <Typography variant="subtitle2">{`${client.fName} ${client.lName}`}</Typography>
+                <Typography
+                  variant="caption"
+                  className="ml-[4px] text-gray-400"
+                >
+                  {client.email}
+                </Typography>
+              </div>
+              <div className="flex flex-col">
+                <Typography variant="subtitle2">
+                  {numberWithCommas(client.totalBuy)}
+                </Typography>
+                <Typography
+                  variant="caption"
+                  className="ml-[4px] text-gray-400"
+                >
+                  سفارش ها
+                </Typography>
+              </div>
             </div>
-            <div className="flex flex-col">
-              <Typography variant="subtitle2">
-                {numberWithCommas(client.totalBuy)}
-              </Typography>
-              <Typography variant="caption" className="ml-[4px] text-gray-400">
-                سفارش ها
-              </Typography>
-            </div>
-          </div>
-        ))
-      )}
-      {isFetching && (
-        <MoonLoader
-          size={20}
-          color={theme.palette.accent.main}
-          loading={true}
-          cssOverride={{
-            left: "50%",
-            position: "absolute",
-            marginTop: "10px",
-          }}
-        />
-      )}
+          ))
+        )}
+        {isFetching && (
+          <MoonLoader
+            size={20}
+            color={theme.palette.accent.main}
+            loading={true}
+            cssOverride={{
+              left: "50%",
+              position: "absolute",
+              marginTop: "10px",
+            }}
+          />
+        )}
+      </div>
     </div>
   );
 };
