@@ -8,6 +8,9 @@ import cart from "redux/slices/cart";
 import user from "redux/slices/user";
 import analytics from "redux/slices/analytics";
 import discounts from "redux/slices/discounts";
+import customers from "redux/slices/customers";
+import customer from "redux/slices/customer";
+import statistics from "redux/slices/statistics";
 import { loadState } from "utils/browser-storage";
 import { getInitialInfo } from "redux/slices/products";
 
@@ -18,7 +21,10 @@ const reducer = combineReducers({
   cart,
   user,
   analytics,
-  discounts
+  discounts,
+  customers,
+  customer,
+  statistics,
 });
 
 const store = configureStore({

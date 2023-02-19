@@ -259,15 +259,15 @@ const MainLayout = ({ children }) => {
           </li>
           <li
             className={`menu-item${
-              router.pathname === "/reports" ? " active" : ""
+              router.pathname === "/statistics" ? " active" : ""
             }`}
           >
-            <Link href="/reports">
+            <Link href="/statistics">
               <a>
                 <Icon
                   className="icon"
                   icon={`${
-                    router.pathname === "/reports"
+                    router.pathname === "/statistics"
                       ? "reports-filled"
                       : "reports"
                   }`}
@@ -290,8 +290,7 @@ const MainLayout = ({ children }) => {
       <section
         className={clsx(
           "profile-main-section relative mr-0",
-          "w-full flex-1 rounded-[4px] border-[1px] border-secondary-dark-200",
-          "dark:border-secondary-dark-800",
+          "w-full flex-1",
           "lg:mr-2 lg:w-auto"
         )}
       >
