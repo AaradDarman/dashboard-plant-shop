@@ -151,12 +151,15 @@ function EnhancedTableRow({ selected, children, ...otherProps }) {
   );
 }
 
-const ToBeStyledTooltip = ({ className, ...props }) => (
-  <Tooltip {...props} classes={{ tooltip: className }} />
-);
-const StyledTooltip = muiStyled(ToBeStyledTooltip)(({ theme }) => ({
-  backgroundColor: theme.palette.primary.dark,
-}));
+const statusOptions = {
+  success: "موفق",
+  failed: "ناموفق",
+};
+
+const statusClassOptions = {
+  success: "bg-[#16a34a]/[.2] text-[#16a34a]",
+  failed: "bg-[#db3131]/[.2] text-[#db3131]",
+};
 
 const RecentTransactions = ({ className }) => {
   const theme = useTheme();
@@ -292,7 +295,13 @@ const RecentTransactions = ({ className }) => {
                       {numberWithCommas(item.price)}
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                      {item.status}
+                      <span
+                        className={`rounded-md px-2 ${
+                          statusClassOptions[item.status]
+                        }`}
+                      >
+                        {statusOptions[item.status]}
+                      </span>
                     </StyledTableCell>
                     <StyledTableCell align="center">
                       {item.trackingNumber}
