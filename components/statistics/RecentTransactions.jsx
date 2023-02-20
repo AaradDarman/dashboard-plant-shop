@@ -48,6 +48,7 @@ import { getRecentTransactions, getTopProducts } from "redux/slices/statistics";
 import useInfiniteScroll from "components/hooks/useInfiniteScroll";
 import { statisticsContext } from "context/statistics-context";
 import { useDebounce } from "components/hooks/useDebounce";
+import useBreakpoints from "utils/useBreakPoints";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -116,13 +117,13 @@ function EnhancedTableToolbar(props) {
       sx={{
         padding: "0 8px !important",
       }}
-      className="!min-h-fit"
+      className="flex !min-h-fit flex-wrap justify-between"
     >
-      <Typography variant="h6" className="!text-[16px]">
+      <Typography variant="h6" className="!my-2 !text-[16px]">
         تراکنش های اخیر
       </Typography>
       <SearchInput
-        className="my-2 !mr-auto !rounded-md border-[1px] border-secondary-dark-800 !bg-transparent"
+        className="my-2 !rounded-md border-[1px] border-secondary-dark-800 !bg-transparent"
         value={search}
         onChange={(val) => {
           setSearch(val);
@@ -178,6 +179,7 @@ const RecentTransactions = ({ className }) => {
 
   const dispatch = useDispatch();
   const parentRef = useRef(null);
+  const { isXs } = useBreakpoints();
 
   const handleRequestSort = (event, property) => {
     const isAsc =
@@ -247,7 +249,7 @@ const RecentTransactions = ({ className }) => {
           backgroundImage: "none",
           boxShadow: "none",
           padding: "0 8px",
-          direction: "rtl",
+          direction: isXs ? "ltr" : "rtl",
         }}
         ref={parentRef}
       >

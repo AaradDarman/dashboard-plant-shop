@@ -48,6 +48,7 @@ import { getTopProducts } from "redux/slices/statistics";
 import useInfiniteScroll from "components/hooks/useInfiniteScroll";
 import { statisticsContext } from "context/statistics-context";
 import { useDebounce } from "components/hooks/useDebounce";
+import useBreakpoints from "utils/useBreakPoints";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -119,7 +120,7 @@ function EnhancedTableToolbar(props) {
       }}
       className="flex !min-h-fit flex-wrap"
     >
-      <Typography variant="h6" className="!text-[16px]">
+      <Typography variant="h6" className="!my-2 !text-[16px]">
         محصولات برتر
       </Typography>
       <FormControl
@@ -249,6 +250,7 @@ const TopProducts = ({ className }) => {
 
   const parentRef = useRef(null);
   const dispatch = useDispatch();
+  const { isXs } = useBreakpoints();
 
   const handleRequestSort = (event, property) => {
     const isAsc = topProductsOrderBy === property && topProductsOrder === "asc";
@@ -320,7 +322,7 @@ const TopProducts = ({ className }) => {
           backgroundImage: "none",
           boxShadow: "none",
           padding: "0 8px",
-          direction: "rtl",
+          direction: isXs ? "ltr" : "rtl",
         }}
         ref={parentRef}
       >
