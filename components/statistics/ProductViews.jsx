@@ -58,7 +58,7 @@ const ProductViews = ({ className }) => {
   const { entity, range, status } = useSelector(
     (state) => state.statistics.productViews
   );
-  const { isSm } = breakPoints;
+  const { isSm, isXs } = breakPoints;
   const series = [
     {
       name: "بازدید",
@@ -93,7 +93,7 @@ const ProductViews = ({ className }) => {
       },
       foreColor: theme.palette.text.primary,
       background: "transparent",
-      //   offsetY: 20,
+      offsetY: 20,
     },
     tooltip: {
       theme: "dark",
@@ -120,8 +120,8 @@ const ProductViews = ({ className }) => {
       type: "category",
       categories: range,
       labels: {
-        // offsetY: isSm ? 0 : 30,
-        offsetX: isSm ? 0 : -10,
+        offsetY: isXs && incomeFilter === "weekly" ? 30 : 0,
+        offsetX: isXs && incomeFilter === "weekly" ? -10 : 0,
       },
       position: "bottom",
       axisBorder: {
@@ -159,7 +159,7 @@ const ProductViews = ({ className }) => {
       min: 1,
       tickAmount: 5,
       labels: {
-        offsetX: isSm ? -30 : -40,
+        offsetX: -30,
         formatter: (val) => {
           if (val === 0) return "";
           return compactNumber(val);
