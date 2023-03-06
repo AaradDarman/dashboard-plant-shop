@@ -16,7 +16,7 @@ const ReactApexChart = dynamic(() => import("react-apexcharts"), {
 import { css as Loadercss } from "@emotion/react";
 import PulseLoader from "react-spinners/PulseLoader";
 
-import useBreakPoints from "utils/useBreakPoints";
+import useBreakPoints, { useMediaQuery } from "utils/useBreakPoints";
 import { numberWithCommas, compactNumber } from "utils/number-helper";
 import { useTheme } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
@@ -93,7 +93,7 @@ const ProductViews = ({ className }) => {
       },
       foreColor: theme.palette.text.primary,
       background: "transparent",
-      offsetY: 20,
+      // offsetY: 20,
     },
     tooltip: {
       theme: "dark",
@@ -120,15 +120,18 @@ const ProductViews = ({ className }) => {
       type: "category",
       categories: range,
       labels: {
-        offsetY: isXs && incomeFilter === "weekly" ? 30 : 0,
-        offsetX: isXs && incomeFilter === "weekly" ? -10 : 0,
+        offsetY:
+          useMediaQuery("(max-width: 400px)") && incomeFilter === "weekly"
+            ? 30
+            : 0,
+        offsetX:
+          useMediaQuery("(max-width: 400px)") && incomeFilter === "weekly"
+            ? -10
+            : 0,
       },
       position: "bottom",
       axisBorder: {
-        show: true,
-        color: "#ff0000",
-        offsetX: isSm ? 10 : 0,
-        offsetY: 0,
+        show: false,
       },
       axisTicks: {
         show: false,
@@ -156,13 +159,12 @@ const ProductViews = ({ className }) => {
     yaxis: {
       showForNullSeries: false,
       forceNiceScale: true,
-      min: 1,
+      min: 0,
       tickAmount: 5,
       labels: {
-        offsetX: -30,
         formatter: (val) => {
           if (val === 0) return "";
-          return compactNumber(val);
+          return compactNumber(Math.round(val));
         },
       },
     },

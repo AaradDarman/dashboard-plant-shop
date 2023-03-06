@@ -21,7 +21,6 @@ const Inventory = () => {
   let debouncedSeasrchTerm = useDebounce(search, 500);
 
   useEffect(() => {
-    console.log("exe");
     dispatch(
       getProductsInventory({
         page: page + 1,
